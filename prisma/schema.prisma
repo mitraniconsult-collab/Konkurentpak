@@ -6,8 +6,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum ProductStatus { DRAFT ACTIVE ARCHIVED }
-enum QuoteStatus { NEW REVIEWING QUOTED ACCEPTED DECLINED }
+enum ProductStatus {
+  DRAFT
+  ACTIVE
+  ARCHIVED
+}
+enum QuoteStatus {
+  NEW
+  REVIEWING
+  QUOTED
+  ACCEPTED
+  DECLINED
+}
 
 model Category {
   id String @id @default(cuid())

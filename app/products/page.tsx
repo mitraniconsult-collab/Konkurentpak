@@ -1,3 +1,3 @@
-import Link from "next/link";
-export const metadata={title:"Продукти"};
-export default function Products(){return <><h1>Продуктов каталог</h1><p>Каталогът се подготвя. Цени, наличности и онлайн поръчки ще бъдат активирани след въвеждане и проверка на продуктовите данни.</p><div className="grid">{["Стандартни кашони","Щанцовани опаковки","Каширани опаковки"].map(x=><article className="card" key={x}><h2>{x}</h2><p>За размери, материали и количества поискайте индивидуална оферта.</p><Link className="btn" href="/custom-packaging">Запитване</Link></article>)}</div></>}
+import Catalog from "./catalog";
+export const metadata={title:"Продуктов каталог",description:"Каталог на кашони и опаковки от велпапе. Търсене по име и категория."};
+export default function Products(){return <><h1>Продуктов каталог</h1><p>Разгледайте опаковките или заявете индивидуално решение.</p><Catalog/></>;}

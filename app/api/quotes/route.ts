@@ -13,7 +13,7 @@ export async function POST(request: Request) {
   const customerName = str(body.customerName, 120);
   const email = str(body.email, 254);
   const lengthMm = int(body.lengthMm), widthMm = int(body.widthMm), heightMm = int(body.heightMm), quantity = int(body.quantity);
-  if (customerName.length < 2 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || [lengthMm,widthMm,heightMm].some(x => x < 1 || x > 10000) || quantity < 1 || quantity > 1000000) return NextResponse.json({ error: "Проверете контактите, размерите и количеството." }, { status: 400 });
+  if (customerName.length < 2 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || [lengthMm,widthMm,heightMm].some(x => !Number.isSafeInteger(x) || x < 1 || x > 10000) || !Number.isSafeInteger(quantity) || quantity < 1 || quantity > 1000000) return NextResponse.json({ error: "Проверете контактите, размерите и количеството." }, { status: 400 });
   try {
     const quote = await prisma.quoteRequest.create({ data: { customerName, email, phone: str(body.phone, 50) || null, company: str(body.company, 120) || null, lengthMm, widthMm, heightMm, quantity, material: str(body.material, 120) || null, notes: str(body.notes, 2000) || null } });
     return NextResponse.json({ ok: true, reference: quote.id }, { status: 201 });

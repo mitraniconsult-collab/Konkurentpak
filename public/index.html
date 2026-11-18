@@ -831,11 +831,11 @@ const I18N = {
     const bad = fields.filter(i => !i.checkValidity());
     if (bad.length) { err.textContent = t('errFields'); err.hidden = false; bad[0].focus(); return; }
     if (!$('#coTerms').checked) { err.textContent = t('errTerms'); err.hidden = false; return; }
-    err.hidden = true;
-    const no = 'KP-' + new Date().toISOString().slice(2, 10).replace(/-/g, '') + '-' + String(Math.floor(Math.random() * 9000) + 1000);
-    $('#coDoneText').textContent = t('doneText', no, $('#coEmail').value);
-    f.hidden = true; $('#coDone').hidden = false;
-    cart = {}; store.set('kp_cart', cart); renderCart();
+    // Never display a fabricated order number: checkout is not connected to an order backend.
+    err.textContent = lang === 'bg'
+      ? 'Онлайн поръчките все още не са активирани. Това е предварителна версия на магазина. Не е направена поръчка или плащане.'
+      : 'Online orders are not active yet. This is a preview of the shop. No order or payment has been made.';
+    err.hidden = false;
   });
 
   /* ---------- quote request ---------- */
@@ -844,7 +844,14 @@ const I18N = {
     $('#qFor').textContent = t('quoteFor', p ? pname(p) : t('quoteGeneric'));
     $('#qDone').hidden = true; $('#qForm').reset(); $('#qDlg').showModal();
   }
-  $('#qForm').addEventListener('submit', e => { e.preventDefault(); $('#qDone').textContent = t('qSent'); $('#qDone').hidden = false; });
+  $('#qForm').addEventListener('submit', e => {
+    e.preventDefault();
+    // Quote form is a UI preview until database integration and anti-spam checks are complete.
+    $('#qDone').textContent = lang === 'bg'
+      ? 'Формата още не изпраща запитвания. Моля, свържете се с нас по телефон или имейл.'
+      : 'This form does not send enquiries yet. Please contact us by phone or email.';
+    $('#qDone').hidden = false;
+  });
 
   /* ---------- one delegated click handler for the whole page ---------- */
   document.addEventListener('click', e => {
